@@ -1,12 +1,9 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import { type Construct } from 'constructs';
 import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
 
-export class DynamoDB extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
-
-    const table = new Table(this, 'posts', {
+export class DynamoDB {
+  constructor(scope: Construct) {
+    const table = new Table(scope, 'posts', {
       tableName: 'posts',
       partitionKey: {
         name: 'id',

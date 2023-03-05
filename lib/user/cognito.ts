@@ -1,12 +1,9 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import { type Construct } from 'constructs';
 import { UserPool, UserPoolClient, VerificationEmailStyle } from 'aws-cdk-lib/aws-cognito';
 
-export class Cognito extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
-
-    const userPool = new UserPool(this, 'user-pool', {
+export class Cognito {
+  constructor(scope: Construct) {
+    const userPool = new UserPool(scope, 'user-pool', {
       userPoolName: 'endorse-mi-user-pool',
       // by setting this to true, users can sign themselves up for the user pool without
       // requiring an administrator to create the user account
@@ -39,7 +36,7 @@ export class Cognito extends cdk.Stack {
       },
     });
 
-    new UserPoolClient(this, 'user-pool-client', {
+    new UserPoolClient(scope, 'user-pool-client', {
       userPool,
       userPoolClientName: 'endorse-mi-user-pool-client',
       authFlows: {

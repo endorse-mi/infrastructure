@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import { type Construct } from 'constructs';
 import { UserStack } from './user/user-stack';
 import { PostStack } from './post/post-stack';
 
