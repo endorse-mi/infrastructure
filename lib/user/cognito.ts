@@ -1,14 +1,15 @@
 import { type Construct } from 'constructs';
 import { UserPool, UserPoolClient, VerificationEmailStyle } from 'aws-cdk-lib/aws-cognito';
+import { RemovalPolicy } from 'aws-cdk-lib';
 
 export class Cognito {
   constructor(scope: Construct) {
     const userPool = new UserPool(scope, 'user-pool', {
-      userPoolName: 'endorse-mi-user-pool',
-      // by setting this to true, users can sign themselves up for the user pool without
-      // requiring an administrator to create the user account
+      userPoolName: 'endorse-mi-user-pool-prod',
+      // By setting this to true, users can sign themselves up for the user pool without
+      // requiring an administrator to create the user account.
       selfSignUpEnabled: true,
-      // sign-in aliases are ways in which a user can sign in to the user pool
+      // signInAliases are ways in which a user can sign in to the user pool.
       signInAliases: {
         email: true,
       },
@@ -19,28 +20,23 @@ export class Cognito {
         email: {
           required: true,
         },
-        familyName: {
-          required: true,
-        },
-        givenName: {
-          required: true,
-        },
-        profilePage: {
-          required: true,
-        },
       },
       userVerification: {
-        emailSubject: 'Verify your email for the app!',
-        emailBody: 'Hello, thanks for signing up click {####}',
+        emailSubject: 'Here is your verification code!',
+        emailBody: 'Hello, your verification code is {####}',
         emailStyle: VerificationEmailStyle.CODE,
       },
+      removalPolicy: RemovalPolicy.DESTROY,
     });
 
     new UserPoolClient(scope, 'user-pool-client', {
       userPool,
-      userPoolClientName: 'endorse-mi-user-pool-client',
+      userPoolClientName: 'endorse-mi-user-pool-client-prod',
       authFlows: {
-        userPassword: true,
+        // The userSrp flow uses the SRP protocol (Secure Remote Password) where the password
+        // never leaves the client and is unknown to the server. Whereas the userPassword
+        // flow will send user credentials unencrypted to the back-end.
+        userSrp: true,
       },
     });
   }

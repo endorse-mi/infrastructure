@@ -4,6 +4,7 @@
   "bin": {
     "infrastructure": "bin/infrastructure.js"
   },
+  "license": "MIT",
   "scripts": {
     "prepare": "husky install",
     "build": "tsc",
@@ -15,11 +16,13 @@
     "pre-commit": "yarn lint && yarn format"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.114",
     "@types/jest": "^29.2.5",
     "@types/node": "18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
     "aws-cdk": "2.60.0",
+    "esbuild": "^0.17.16",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard-with-typescript": "^34.0.0",
@@ -36,6 +39,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.60.0",
+    "aws-lambda": "^1.0.7",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"
   }
