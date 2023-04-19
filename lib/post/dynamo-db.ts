@@ -14,10 +14,6 @@ export class DynamoDB {
         name: 'postId',
         type: AttributeType.STRING,
       },
-      sortKey: {
-        name: 'createdAt',
-        type: AttributeType.STRING,
-      },
       billingMode: BillingMode.PAY_PER_REQUEST,
       encryption: TableEncryption.AWS_MANAGED,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -28,26 +24,6 @@ export class DynamoDB {
       indexName: 'userId-index',
       partitionKey: { name: 'userId', type: AttributeType.STRING },
       sortKey: { name: 'createdAt', type: AttributeType.STRING },
-      projectionType: ProjectionType.ALL,
-    });
-
-    // The industry is not used yet.
-    postTable.addLocalSecondaryIndex({
-      indexName: 'industry-index',
-      sortKey: {
-        name: 'industry',
-        type: AttributeType.STRING,
-      },
-      projectionType: ProjectionType.ALL,
-    });
-
-    // The post type can either be ENDORSE or RECOMMEND
-    postTable.addLocalSecondaryIndex({
-      indexName: 'type-index',
-      sortKey: {
-        name: 'type',
-        type: AttributeType.STRING,
-      },
       projectionType: ProjectionType.ALL,
     });
 
