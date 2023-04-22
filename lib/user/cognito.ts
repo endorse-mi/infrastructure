@@ -1,6 +1,7 @@
 import { type Construct } from 'constructs';
 import { UserPool, UserPoolClient, VerificationEmailStyle } from 'aws-cdk-lib/aws-cognito';
 import { RemovalPolicy } from 'aws-cdk-lib';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 
 export class Cognito {
   constructor(scope: Construct) {
@@ -38,6 +39,11 @@ export class Cognito {
         // flow will send user credentials unencrypted to the back-end.
         userSrp: true,
       },
+    });
+
+    new StringParameter(scope, 'user-pool-arn', {
+      parameterName: '/prod/infrastructure/user/cognito-user-pool-arn',
+      stringValue: userPool.userPoolArn,
     });
   }
 }
