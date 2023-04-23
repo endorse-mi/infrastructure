@@ -17,6 +17,7 @@ export class DynamoDB {
       billingMode: BillingMode.PAY_PER_REQUEST,
       encryption: TableEncryption.AWS_MANAGED,
       removalPolicy: RemovalPolicy.DESTROY,
+      timeToLiveAttribute: 'TTL',
     });
 
     // For retrieving posts belonging to a user quickly.
