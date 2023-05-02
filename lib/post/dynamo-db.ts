@@ -1,10 +1,7 @@
 import { type Construct } from 'constructs';
 import { AttributeType, BillingMode, ProjectionType, StreamViewType, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
-import { Runtime, StartingPosition } from 'aws-cdk-lib/aws-lambda';
-import { Duration, RemovalPolicy } from 'aws-cdk-lib';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import path = require('path');
-import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { RemovalPolicy } from 'aws-cdk-lib';
+import { StreamHandler } from './stream-handler';
 
 export class DynamoDB {
   constructor(scope: Construct) {
@@ -16,6 +13,7 @@ export class DynamoDB {
       },
       billingMode: BillingMode.PAY_PER_REQUEST,
       encryption: TableEncryption.AWS_MANAGED,
+      stream: StreamViewType.NEW_AND_OLD_IMAGES,
       removalPolicy: RemovalPolicy.DESTROY,
       timeToLiveAttribute: 'TTL',
     });
@@ -26,6 +24,11 @@ export class DynamoDB {
       partitionKey: { name: 'userId', type: AttributeType.STRING },
       sortKey: { name: 'createdAt', type: AttributeType.STRING },
       projectionType: ProjectionType.ALL,
+    });
+
+    new StreamHandler(scope, {
+      tableName: 'post',
+      tableStreamArn: postTable.tableStreamArn ?? '',
     });
 
     const postInteractionTable = new Table(scope, 'post-interaction-table', {
@@ -54,27 +57,9 @@ export class DynamoDB {
       projectionType: ProjectionType.ALL,
     });
 
-    const streamHandler = new NodejsFunction(scope, 'post-interaction-table-stream-handler', {
-      functionName: 'post-interaction-table-stream-handler-prod',
-      runtime: Runtime.NODEJS_18_X,
-      entry: path.join(__dirname, 'post-interaction-lambda.ts'),
-      handler: 'handler',
-      timeout: Duration.seconds(10),
-    });
-
-    const streamHandlerPermissions = new PolicyStatement({
-      effect: Effect.ALLOW,
-      actions: ['dynamodb:GetRecords', 'dynamodb:GetShardIterator', 'dynamodb:DescribeStream', 'dynamodb:ListStreams'],
-      resources: [postInteractionTable.tableStreamArn ?? ''],
-    });
-
-    streamHandler.role?.addToPrincipalPolicy(streamHandlerPermissions);
-
-    // Associate the post-interaction-table stream with the Lambda function
-    streamHandler.addEventSourceMapping('post-interaction-table-stream-mapping', {
-      eventSourceArn: postInteractionTable.tableStreamArn,
-      batchSize: 10,
-      startingPosition: StartingPosition.LATEST,
+    new StreamHandler(scope, {
+      tableName: 'post-interaction',
+      tableStreamArn: postInteractionTable.tableStreamArn ?? '',
     });
   }
 }
