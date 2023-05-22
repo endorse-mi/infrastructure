@@ -20,8 +20,15 @@ export class DynamoDB {
 
     // For retrieving posts belonging to a user quickly.
     postTable.addGlobalSecondaryIndex({
-      indexName: 'userId-index',
-      partitionKey: { name: 'userId', type: AttributeType.STRING },
+      indexName: 'authorId-index',
+      partitionKey: { name: 'authorId', type: AttributeType.STRING },
+      sortKey: { name: 'createdAt', type: AttributeType.STRING },
+      projectionType: ProjectionType.ALL,
+    });
+
+    postTable.addGlobalSecondaryIndex({
+      indexName: 'type-index',
+      partitionKey: { name: 'type', type: AttributeType.STRING },
       sortKey: { name: 'createdAt', type: AttributeType.STRING },
       projectionType: ProjectionType.ALL,
     });
@@ -39,7 +46,7 @@ export class DynamoDB {
       },
       sortKey: {
         // the user who do the endorsement or recommendation of the post
-        name: 'userId',
+        name: 'fulfillerId',
         type: AttributeType.STRING,
       },
       billingMode: BillingMode.PAY_PER_REQUEST,
