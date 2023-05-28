@@ -4,6 +4,7 @@ import { Runtime, StartingPosition } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import path = require('path');
+import { ENVIRONMENT } from '../config';
 
 type StreamHandlerProps = {
   tableName: string;
@@ -13,7 +14,7 @@ type StreamHandlerProps = {
 export class StreamHandler {
   constructor(scope: Construct, { tableName, tableStreamArn }: StreamHandlerProps) {
     const streamHandler = new NodejsFunction(scope, `${tableName}-table-stream-handler`, {
-      functionName: `${tableName}-table-stream-handler-prod`,
+      functionName: `${tableName}-table-stream-handler-${ENVIRONMENT}`,
       runtime: Runtime.NODEJS_18_X,
       entry: path.join(__dirname, `${tableName}-lambda.ts`),
       handler: 'handler',

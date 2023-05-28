@@ -1,4 +1,4 @@
-name: Deploy Dev
+name: Deploy Prod
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ jobs:
   call-deploy-infrastructure:
     uses: ./.github/workflows/deploy.yml
     with:
-      ENVIRONMENT: dev
+      ENVIRONMENT: prod
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -1,5 +1,9 @@
 on:
   workflow_call:
+    inputs:
+      ENVIRONMENT:
+        required: true
+        type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -12,7 +16,8 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: us-west-1
+      AWS_REGION: us-east-1
+      ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
 
     steps:
       - name: Checkout Repo
@@ -31,4 +36,4 @@ jobs:
         run: yarn test
 
       - name: Deploy on AWS
-        run: npx cdk deploy
+        run: npx cdk deploy --require-approval never

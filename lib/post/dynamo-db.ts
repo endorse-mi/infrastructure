@@ -2,11 +2,12 @@ import { type Construct } from 'constructs';
 import { AttributeType, BillingMode, ProjectionType, StreamViewType, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { StreamHandler } from './stream-handler';
+import { ENVIRONMENT } from '../config';
 
 export class DynamoDB {
   constructor(scope: Construct) {
     const postTable = new Table(scope, 'post-table', {
-      tableName: 'post-table-prod',
+      tableName: `post-table-${ENVIRONMENT}`,
       partitionKey: {
         name: 'postId',
         type: AttributeType.STRING,
@@ -39,7 +40,7 @@ export class DynamoDB {
     });
 
     const postInteractionTable = new Table(scope, 'post-interaction-table', {
-      tableName: 'post-interaction-table-prod',
+      tableName: `post-interaction-table-${ENVIRONMENT}`,
       partitionKey: {
         name: 'postId',
         type: AttributeType.STRING,
