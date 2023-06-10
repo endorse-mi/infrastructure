@@ -43,7 +43,6 @@ export class Cognito {
     new UserPoolClient(scope, 'user-pool-client', {
       userPool,
       userPoolClientName: `endorse-mi-user-pool-client-${ENVIRONMENT}`,
-      generateSecret: true,
       authFlows: {
         // The userSrp flow uses the SRP protocol (Secure Remote Password) where the password
         // never leaves the client and is unknown to the server. Whereas the userPassword
