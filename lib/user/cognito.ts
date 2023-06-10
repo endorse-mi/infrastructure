@@ -1,17 +1,8 @@
 import { type Construct } from 'constructs';
-import { OAuthScope, UserPool, UserPoolClient, VerificationEmailStyle } from 'aws-cdk-lib/aws-cognito';
+import { UserPool, UserPoolClient, VerificationEmailStyle } from 'aws-cdk-lib/aws-cognito';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { ENVIRONMENT } from '../config';
-
-const OAuthCallbackUrls =
-  ENVIRONMENT === 'prod'
-    ? [
-        'http://localhost:3000/api/auth/callback/cognito',
-        'https://endorse-mi.koala-techs.com/api/auth/callback/cognito',
-        'https://prod.endorse-mi.koala-techs.com/api/auth/callback/cognito',
-      ]
-    : ['http://localhost:3000/api/auth/callback/cognito', 'https://dev.endorse-mi.koala-techs.com/api/auth/callback/cognito'];
 
 export class Cognito {
   constructor(scope: Construct) {
@@ -48,11 +39,6 @@ export class Cognito {
         // never leaves the client and is unknown to the server. Whereas the userPassword
         // flow will send user credentials unencrypted to the back-end.
         userSrp: true,
-      },
-      oAuth: {
-        flows: { authorizationCodeGrant: true },
-        callbackUrls: OAuthCallbackUrls,
-        scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE],
       },
     });
 
