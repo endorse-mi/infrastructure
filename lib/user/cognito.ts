@@ -6,8 +6,12 @@ import { ENVIRONMENT } from '../config';
 
 const OAuthCallbackUrls =
   ENVIRONMENT === 'prod'
-    ? ['https://endorse-mi.koala-techs.com/api/auth/callback/cognito', 'https://prod.endorse-mi.koala-techs.com/api/auth/callback/cognito']
-    : ['http://localhost:8080/api/auth/callback/cognito', 'https://dev.endorse-mi.koala-techs.com/api/auth/callback/cognito'];
+    ? [
+        'http://localhost:3000/api/auth/callback/cognito',
+        'https://endorse-mi.koala-techs.com/api/auth/callback/cognito',
+        'https://prod.endorse-mi.koala-techs.com/api/auth/callback/cognito',
+      ]
+    : ['http://localhost:3000/api/auth/callback/cognito', 'https://dev.endorse-mi.koala-techs.com/api/auth/callback/cognito'];
 
 export class Cognito {
   constructor(scope: Construct) {
